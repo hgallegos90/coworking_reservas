@@ -1,0 +1,87 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Eliminar Reservas</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            color: #333;
+        }
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        table, th, td {
+            border: 1px solid #ddd;
+        }
+        th, td {
+            padding: 10px;
+            text-align: left;
+        }
+        .btn-danger {
+            background-color: #dc3545;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .btn-danger:hover {
+            background-color: #c82333;
+        }
+        .text-center {
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Eliminar Reservas</h1>
+        <p>Seleccione las reservas que desea eliminar. Esta acción no se puede deshacer.</p>
+
+        <form method="POST" action="{% url 'eliminar_reserva' %}">
+            {% csrf_token %}
+            <table>
+                <thead>
+                    <tr>
+                        <th class="text-center">Seleccionar</th>
+                        <th>Espacio</th>
+                        <th>Cliente</th>
+                        <th>Fecha de Inicio</th>
+                        <th>Fecha de Fin</th>
+                        <th>Estado</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for reserva in reservas %}
+                        <tr>
+                            <td class="text-center">
+                                <input type="checkbox" name="reservas_seleccionadas" value="{{ reserva.id }}">
+                            </td>
+                            <td>{{ reserva.espacio.nombre }}</td>
+                            <td>{{ reserva.cliente.nombre }}</td>
+                            <td>{{ reserva.fecha_inicio }}</td>
+                            <td>{{ reserva.fecha_fin }}</td>
+                            <td>{{ reserva.estado }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            <button type="submit" class="btn-danger">Eliminar Seleccionados</button>
+        </form>
+        <a href="{% url 'inicio' %}" class="btn btn-secondary">Volver al Inicio</a>
+    </div>
+</body>
+</html>

@@ -1,0 +1,94 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Editar Reserva</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            color: #333;
+        }
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        table, th, td {
+            border: 1px solid #ddd;
+        }
+        th, td {
+            padding: 10px;
+            text-align: left;
+        }
+        button {
+            background-color: #007bff;
+            color: white;
+            padding: 5px 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Editar Reservas</h1>
+        
+        <table>
+            <thead>
+                <tr>
+                    <th>Espacio</th>
+                    <th>Cliente</th>
+                    <th>Fecha de Inicio</th>
+                    <th>Fecha de Fin</th>
+                    <th>Estado</th>
+                    <th>Acción</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for reserva in reservas %}
+                    <tr>
+                        <td>{{ reserva.espacio.nombre }}</td>
+                        <td>{{ reserva.cliente.nombre }}</td>
+                        <td>{{ reserva.fecha_inicio }}</td>
+                        <td>{{ reserva.fecha_fin }}</td>
+                        <td>{{ reserva.estado }}</td>
+                        <td>
+                            <!-- Botón para cargar el formulario de edición -->
+                            <form method="POST" action="{% url 'editar_reserva' %}">
+                                {% csrf_token %}
+                                <input type="hidden" name="reserva_id" value="{{ reserva.id }}">
+                                <button type="submit">Editar</button>
+                            </form>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <!-- Formulario de edición, que se mostrará al seleccionar una reserva -->
+        {% if form %}
+            <h2>Editar Reserva Seleccionada</h2>
+            <form method="POST" action="{% url 'editar_reserva' %}">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <button type="submit">Guardar Cambios</button>
+            </form>
+        {% endif %}
+        <a href="{% url 'inicio' %}" class="btn btn-secondary">Volver al Inicio</a>
+    </div>
+</body>
+</html>

@@ -1,0 +1,96 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Crear Reserva</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+
+        form {
+            margin-top: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        input, select, button {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+
+        button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        .btn-secondary {
+            background-color: #6c757d;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Crear Reserva</h1>
+
+        <!-- Formulario para el Cliente -->
+        <form method="POST" action="{% url 'crear_reserva' %}">
+            {% csrf_token %}
+        
+            <!-- Datos del Cliente -->
+            <h2>Datos del Cliente</h2>
+            {{ cliente_form.as_p }}
+        
+            <!-- Datos de la Reserva -->
+            <h2>Datos de la Reserva</h2>
+            
+            <!-- Selección de Espacio -->
+            <label for="espacio_id">Selecciona un Espacio:</label>
+            <select name="espacio_id" id="espacio_id" required>
+                {% for espacio in espacios %}
+                    <option value="{{ espacio.id }}">{{ espacio.nombre }} ({{ espacio.get_tipo_display }})</option>
+                {% endfor %}
+            </select>
+        
+            {{ reserva_form.as_p }}
+        
+            <!-- Botón de Guardar Reserva -->
+            <button type="submit">Guardar Reserva</button>
+        </form>
+
+        <a href="{% url 'inicio' %}" class="btn btn-secondary">Volver a Inicio</a>
+    </div>
+</body>
+</html>
